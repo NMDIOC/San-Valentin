@@ -7,7 +7,7 @@ PASSWORD_HASH = "42a6098e31992128126ded9c5476bd5c2fba61190c0cba734db126bb9696892
 
 NAME_B64 = "Vmlja3k="
 
-MSG_B64 = "SG9sYSBWaWNreS4uLiBRdWVyw61hIGRlY2lydGUgcXVlIGRpc2ZydXRvIG11Y2jDrXNpbW8gY2FkYSBtb21lbnRvIHF1ZSBwYXNhbW9zIGp1bnRvcy4gTWUgZW5jYWVudGEgdHUgc29ucmlzYSB5IGxvIGJpZW4gcXVlIG1lIGhhY2VzIHNlbnRpci4gVGUgcXVpZXJvIG11Y2hvIHkgbWUgYWxlZ3JhIHF1ZSBzZWFzIHT6IHF1aWVuIGVzdMOhIGFxdcOtLiDCoUZlbGl6IFNhbiBWYWxlbnTDrW4h"
+MSG_B64 = "<BASE64_MESSAGE_AQUI>"
 
 def verify_code(input_str):
     hashed = hashlib.sha256(input_str.strip().encode('utf-8')).hexdigest()
@@ -24,8 +24,14 @@ def main():
     if st.button("Desbloquear"):
         if verify_code(code_input):
             # ÉXITO
-            name = base64.b64decode(NAME_B64).decode('utf-8')
-            msg = base64.b64decode(MSG_B64).decode('utf-8')
+            try:
+                name = base64.b64decode(NAME_B64).decode('utf-8')
+            except Exception:
+                name = "Usuario"
+            try:
+                msg = base64.b64decode(MSG_B64).decode('utf-8')
+            except Exception:
+                msg = "El mensaje no está disponible (Base64 inválido)."
             
             st.success("Acceso concedido")
             st.balloons()

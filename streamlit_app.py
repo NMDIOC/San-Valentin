@@ -2,13 +2,8 @@ import streamlit as st
 import hashlib
 import base64
 
-# --- CONFIGURACIÓN DE SEGURIDAD (CENSURADO) ---
-# La contraseña "censurada" es el hash SHA-256 de la palabra real.
-# (En este ejemplo, la contraseña real es: "sanvalentin2026")
 PASSWORD_HASH = "829557b77a7605e55e56e047434771e35967f0b8655866164f9f783626e27926"
 
-# El texto oculto está en Base64 para que no se lea al abrir el archivo.
-# (Texto actual: "¡Felicidades! Has desbloqueado el mensaje secreto.")
 MENSAJE_CIFRADO = "wqFGZWxpY2lkYWRlcyEgSGFzIGRlc2Jsb3F1ZWFkbyBlbCBtZW5zYWplIHNlY3JldG8u"
 
 def check_password(input_pass):

@@ -1,6 +1,42 @@
 import streamlit as st
+import hashlib
+import base64
 
-st.title("🎈 My new app")
-st.write(
-    "Let's start building! For help and inspiration, head over to [docs.streamlit.io](https://docs.streamlit.io/)."
-)
+# --- CONFIGURACIÓN DE SEGURIDAD (CENSURADO) ---
+# La contraseña "censurada" es el hash SHA-256 de la palabra real.
+# (En este ejemplo, la contraseña real es: "sanvalentin2026")
+PASSWORD_HASH = "829557b77a7605e55e56e047434771e35967f0b8655866164f9f783626e27926"
+
+# El texto oculto está en Base64 para que no se lea al abrir el archivo.
+# (Texto actual: "¡Felicidades! Has desbloqueado el mensaje secreto.")
+MENSAJE_CIFRADO = "wqFGZWxpY2lkYWRlcyEgSGFzIGRlc2Jsb3F1ZWFkbyBlbCBtZW5zYWplIHNlY3JldG8u"
+
+def check_password(input_pass):
+    """Verifica si el hash de la entrada coincide con el guardado."""
+    input_hash = hashlib.sha256(input_pass.encode()).hexdigest()
+    return input_hash == PASSWORD_HASH
+
+def main():
+    st.set_page_config(page_title="Acceso Privado", page_icon="🔒")
+
+    st.title("📂 Archivo Confidencial")
+    st.write("Introduce el código de acceso para revelar el contenido.")
+
+    # Input de contraseña
+    password_input = st.text_input("Código de seguridad", type="password")
+
+    if st.button("Desbloquear"):
+        if check_password(password_input):
+            st.success("Acceso concedido")
+            
+            # Desciframos el mensaje para mostrarlo
+            mensaje_decodificado = base64.b64decode(MENSAJE_CIFRADO).decode("utf-8")
+            
+            st.balloons() # Efecto visual de celebración
+            st.markdown(f"### 💌 Mensaje Recuperado:")
+            st.info(mensaje_decodificado)
+        else:
+            st.error("Código incorrecto. Inténtalo de nuevo.")
+
+if __name__ == "__main__":
+    main()
